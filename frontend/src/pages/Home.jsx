@@ -1,10 +1,10 @@
 import React from 'react'
-
+import Nav from '../Component/Nav'
 function home() {
   return (
-    <div  className='text-[30px]'>
-    home page
-    </div>
+    <div>
+    <Nav></Nav>
+    </div> 
   )
 }
 

@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoMdEye } from "react-icons/io";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-  import { FaLongArrowAltLeft } from "react-icons/fa";
+import axios from "axios";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+  import { authDataContext } from "../Context/AuthContext";
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   let navigate = useNavigate();
+  let [name, setName] = useState("");
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+  let { serverUrl } = useContext(authDataContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your form submission logic here
+  const handleSignUP = async (e) => {
+    try {
+      e.preventDefault();
+      let result =  await axios.post(
+        serverUrl + "/api/auth/signup",
+        {
+          name,
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   return (
     <div className="w-[100vw] h-[100vh] flex items-center justify-center relative">
       <div
@@ -21,8 +39,8 @@ function SignUp() {
         <FaLongArrowAltLeft className="w-[25px] h-[25px] text-[white]" />
       </div>
       <form
-        onSubmit={handleSubmit}
-        className="max-w-[900px] w-[90%] h-[600px] flex items-center justify-center flex-col md:items-start gap-[10px]"
+        onSubmit={handleSignUP}
+        className="max-w-[900px] w-[90%] h-[600px] flex items-center justify-center flex-col md:items-start gap-[10px] "
       >
         <h1 className="text-[30px] text-[black]">Welcome to Airbnb</h1>
 
@@ -34,6 +52,9 @@ function SignUp() {
             type="text"
             id="name"
             className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
+            required
+            onChange={(e) => setName(e.target.value)}
+            value={name}
           />
         </div>
 
@@ -44,7 +65,10 @@ function SignUp() {
           <input
             type="email"
             id="email"
-            className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
+            className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]   "
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
         </div>
 
@@ -55,7 +79,10 @@ function SignUp() {
           <input
             type={showPassword ? "text" : "password"}
             id="password"
-            className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]"
+            className="w-[90%] h-[40px] border-[2px] border-[#555656] rounded-lg text-[18px] px-[20px]  "
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
           />
           {showPassword ? (
             <FaEyeSlash
