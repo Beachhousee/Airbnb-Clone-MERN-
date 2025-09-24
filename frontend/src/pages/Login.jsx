@@ -6,8 +6,10 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { useContext } from "react";
 import axios from "axios";
 import { authDataContext } from "../Context/AuthContext";
+import { userDataContext } from "../Context/UserContext";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  let { userData, setUserData } = useContext(userDataContext);
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
 
@@ -25,6 +27,8 @@ function Login() {
         },
         { withCredentials: true }
       );
+      setUserData(result.data);
+      navigate("/");
       console.log(result);
     } catch (error) {
       console.log(error);

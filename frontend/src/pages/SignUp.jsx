@@ -4,11 +4,13 @@ import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-  import { authDataContext } from "../Context/AuthContext";
+import { authDataContext } from "../Context/AuthContext.jsx";
+import { userDataContext } from "../Context/UserContext.jsx";
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   let navigate = useNavigate();
   let [name, setName] = useState("");
+  let { userData, setUserData } = useContext(userDataContext);
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let { serverUrl } = useContext(authDataContext);
@@ -16,7 +18,7 @@ function SignUp() {
   const handleSignUP = async (e) => {
     try {
       e.preventDefault();
-      let result =  await axios.post(
+      let result = await axios.post (
         serverUrl + "/api/auth/signup",
         {
           name,
@@ -25,6 +27,8 @@ function SignUp() {
         },
         { withCredentials: true }
       );
+      setUserData(result.data);
+      navigate('/');
       console.log(result);
     } catch (error) {
       console.log(error);

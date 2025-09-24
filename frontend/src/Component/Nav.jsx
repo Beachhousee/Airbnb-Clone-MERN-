@@ -5,18 +5,20 @@ import { FaSearch } from "react-icons/fa";
 import { MdWhatshot } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
-import { FaHome } from "react-icons/fa"; 
-import { GiTreehouse } from "react-icons/gi"; 
-import { GiWaves } from "react-icons/gi"; 
-import { FaBuilding } from "react-icons/fa"; 
-import { FaCity } from "react-icons/fa"; 
-import { FaBed } from "react-icons/fa"; 
-import { GiWoodCabin } from "react-icons/gi"; 
-import { FaStore } from "react-icons/fa"; 
+import { FaHome } from "react-icons/fa";
+import { GiTreehouse } from "react-icons/gi";
+import { GiWaves } from "react-icons/gi";
+import { FaBuilding } from "react-icons/fa";
+import { FaCity } from "react-icons/fa";
+import { FaBed } from "react-icons/fa";
+import { GiWoodCabin } from "react-icons/gi";
+import { FaStore } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { authDataContext } from "../Context/AuthContext";
+import { userDataContext } from "../Context/UserContext";
 function Nav() {
   let [showpopup, setShowpopup] = useState(false);
+  let { userData, setUserData } = useContext(userDataContext);
   let navigate = useNavigate();
   let serverUrl = useContext(authDataContext);
   const handleLogOut = async () => {
@@ -24,13 +26,13 @@ function Nav() {
       let result = await axios.post(serverUrl + "/api/auth/logout", {
         withCredentials: true,
       });
+      setUserData(null);
       console.log(result);
     } catch (error) {
       console.log(error);
     }
   };
 
-  
   return (
     <div>
       <div className="w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] px-[40px] flex items-center justify-between">
@@ -58,9 +60,13 @@ function Nav() {
             <span>
               <GiHamburgerMenu className="w-[20px] h-[20px]" />
             </span>
-            <span>
-              <CgProfile className="w-[23px] h-[23px]" />
-            </span>
+            {userData == null && <span className="h-[23px] w-[23px]" />}
+
+            {userData != null && (
+              <button className="h-[30px] w-[30px] bg-[#080808] text-white rounded-full flex items-center justify-center">
+                {userData?.name.slice(0, 1)}
+              </button>
+            )}
           </button>
           {showpopup && (
             <div className="w-[220px] h-[250px] absolute bg-slate-50 top-[110%] right-[3%] border-[1px] border-[#aaa9a9] z-10 rounded-lg md:right-[10%] ">
